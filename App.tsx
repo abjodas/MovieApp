@@ -10,8 +10,10 @@ const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Tab" component={TabNavigator} />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Tab" component={TabNavigator} options={{ animation: "default" }} />
+        <Stack.Screen name="MovieDetails" component={MovieDetailsScreen} options={{ animation: "slide_from_right" }} />
+        <Stack.Screen name="SeatBooking" component={SeatBookingScreen} options={{ animation: "slide_from_bottom" }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
