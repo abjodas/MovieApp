@@ -28,12 +28,27 @@ const TabNavigator = () => {
             <Tab.Screen name="Home" component={HomeScreen} options={{
                 tabBarShowLabel: false,
                 tabBarIcon: ({ focused, color, size }) => {
-                    return <View style={styles.activeTabBackground}></View>
+                    return <View style={focused ? styles.activeTabBackground : styles.inactiveTabBackground}><CustomIcon name="video" size={FONTSIZE.size_30} color={COLORS.White} /></View>
                 }
             }} />
-            <Tab.Screen name="Search" component={SearchScreen} />
-            <Tab.Screen name="Tickets" component={TicketScreen} />
-            <Tab.Screen name="User" component={UserAccountScreen} />
+            <Tab.Screen name="Search" component={SearchScreen} options={{
+                tabBarShowLabel: false,
+                tabBarIcon: ({ focused, color, size }) => {
+                    return <View style={focused ? styles.activeTabBackground : styles.inactiveTabBackground}><CustomIcon name="search" size={FONTSIZE.size_30} color={COLORS.White} /></View>
+                }
+            }} />
+            <Tab.Screen name="Tickets" component={TicketScreen} options={{
+                tabBarShowLabel: false,
+                tabBarIcon: ({ focused, color, size }) => {
+                    return <View style={focused ? styles.activeTabBackground : styles.inactiveTabBackground}><CustomIcon name="ticket" size={FONTSIZE.size_30} color={COLORS.White} /></View>
+                }
+            }} />
+            <Tab.Screen name="User" component={UserAccountScreen} options={{
+                tabBarShowLabel: false,
+                tabBarIcon: ({ focused, color, size }) => {
+                    return <View style={focused ? styles.activeTabBackground : styles.inactiveTabBackground}><CustomIcon name="user" size={FONTSIZE.size_30} color={COLORS.White} /></View>
+                }
+            }} />
         </Tab.Navigator>
     )
 }
@@ -41,6 +56,11 @@ const TabNavigator = () => {
 const styles = StyleSheet.create({
     activeTabBackground: {
         backgroundColor: COLORS.Orange,
+        padding: SPACING.space_18,
+        borderRadius: SPACING.space_18 * 10
+    },
+    inactiveTabBackground: {
+        backgroundColor: COLORS.Black,
         padding: SPACING.space_18,
         borderRadius: SPACING.space_18 * 10
     }

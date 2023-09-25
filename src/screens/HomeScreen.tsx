@@ -1,13 +1,15 @@
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text>Home Screen</Text>
-    </View>
+      <TouchableOpacity onPress={() => { navigation.push("MovieDetails") }}>
+        <Text>Home Screen</Text>
+      </TouchableOpacity>
+    </View >
   );
 };
 
