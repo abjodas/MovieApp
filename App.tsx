@@ -5,6 +5,7 @@ import TabNavigator from './src/navigators/TabNavigator';
 import MovieDetailsScreen from './src/screens/MovieDetailsScreen';
 import SeatBookingScreen from './src/screens/SeatBookingScreen';
 
+
 const Stack = createNativeStackNavigator();
 
 const App = () => {
