@@ -1,6 +1,6 @@
 import React from 'react';
-import {Text, StyleSheet} from 'react-native';
-import {COLORS, FONTFAMILY, FONTSIZE, SPACING} from '../theme/theme';
+import { Text, StyleSheet } from 'react-native';
+import { COLORS, FONTFAMILY, FONTSIZE, SPACING } from '../Themes/theme';
 
 const CategoryHeader = (props: any) => {
   return <Text style={styles.text}>{props.title}</Text>;

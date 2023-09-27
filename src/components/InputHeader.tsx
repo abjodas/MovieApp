@@ -5,14 +5,14 @@ import { COLORS, SPACING, BORDERRADIUS, FONTFAMILY, FONTSIZE } from '../Themes/t
 import CustomIcon from './CustomIcon';
 
 
-const InputHeader = ({ text }) => {
+const InputHeader = (props: any) => {
   const [searchText, onChangeText] = useState<string>("");
 
 
   return (
     <View style={styles.inputBox}>
-      <TextInput style={styles.textInput} placeholderTextColor={COLORS.WhiteRGBA32} placeholder={text} onChangeText={textInput => onChangeText(textInput)} />
-      <TouchableOpacity onPress={() => console.log(searchText)}>
+      <TextInput style={styles.textInput} placeholderTextColor={COLORS.WhiteRGBA32} value={searchText} placeholder={props.text} onChangeText={textInput => onChangeText(textInput)} />
+      <TouchableOpacity onPress={() => props.searchFunction(searchText)}>
         <CustomIcon name="search" size={FONTSIZE.size_20} color={COLORS.Orange} />
       </TouchableOpacity>
     </View >
