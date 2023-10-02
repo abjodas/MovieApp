@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, Image } from 'react-native';
 import { COLORS, FONTFAMILY, FONTSIZE, SPACING } from '../Themes/theme';
 
 const CategoryHeader = (props: any) => {

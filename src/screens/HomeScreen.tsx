@@ -5,6 +5,7 @@ import { COLORS, SPACING } from '../Themes/theme.ts'
 import { upcomingMovies, popularMovies, nowPlayingMovies, imageUrl } from '../api/apicalls.ts';
 import InputHeader from '../components/InputHeader.tsx';
 import CategoryHeader from '../components/CategoryHeader.tsx';
+import SubMovieCard from '../components/SubMovieCard.tsx';
 
 const { width, height } = Dimensions.get('window')
 
@@ -48,18 +49,20 @@ const HomeScreen = ({ navigation }: any) => {
   useEffect(() => {
     (async () => {
       let tempNowPlaying = await getNowPlayingMovies();
-      setNowPlayingMoviesList({ ...tempNowPlaying });
+      setNowPlayingMoviesList(tempNowPlaying.results);
       let tempPopular = await getPopularMovies();
-      setPopularMoviesList({ ...tempPopular });
+      setPopularMoviesList(tempPopular.results);
       let tempUpcoming = await getUpcomingMovies();
-      setUpcomingMoviesList({ ...tempUpcoming });
+      setUpcomingMoviesList(tempUpcoming.results);
     })();
   }, [])
+
 
 
   const searchMoviesFunction = () => {
     navigation.navigate("Search")
   }
+
 
   if (nowPlayingMoviesList == undefined && popularMoviesList == undefined && upcomingMoviesList == undefined
     && nowPlayingMoviesList == null && popularMoviesList == null && upcomingMoviesList == null) {
@@ -79,13 +82,57 @@ const HomeScreen = ({ navigation }: any) => {
   }
 
   return (
-    <ScrollView style={styles.container} bounces={false} contentContainerStyle={styles.scrollViewContainer}>
+    <ScrollView style={styles.container} bounces={false}>
       <StatusBar hidden />
 
       <View style={styles.inputHeaderContainer}>
         <InputHeader text={"Search Your Movies Here"} searchFunction={searchMoviesFunction} />
       </View>
+
+
       <CategoryHeader title={"Now Playing"} />
+
+
+      {nowPlayingMoviesList != undefined && nowPlayingMoviesList.length != 0 &&
+        < FlatList
+          data={nowPlayingMoviesList}
+          horizontal={true}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            return <SubMovieCard posterPath={imageUrl("w185", item.poster_path)} navigation={navigation} item={item} />
+          }}
+        />}
+
+
+
+
+
+
+      <CategoryHeader title={"Upcoming"} />
+      {upcomingMoviesList != undefined && upcomingMoviesList.length != 0 &&
+        < FlatList
+          data={upcomingMoviesList}
+          horizontal={true}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            return <SubMovieCard posterPath={imageUrl("w185", item.poster_path)} />
+          }}
+        />}
+
+      <CategoryHeader title={"Popular"} />
+      {popularMoviesList != undefined && popularMoviesList.length != 0 &&
+        <View style={{ height: 200 }}>
+          < FlatList
+            data={popularMoviesList}
+            horizontal={true}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => {
+              return <SubMovieCard posterPath={imageUrl("w185", item.poster_path)} />
+            }}
+          />
+        </View>}
+
+
 
     </ScrollView>
   );
