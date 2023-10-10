@@ -9,35 +9,9 @@ import SubMovieCard from '../components/SubMovieCard.tsx';
 
 const { width, height } = Dimensions.get('window')
 
-const getNowPlayingMovies = async () => {
-  try {
-    let data = await fetch(nowPlayingMovies);
-    let jsonResponse = await data.json();
-    return jsonResponse;
-  } catch (error) {
-    console.error("Something went wrong while fetching popular movies list", error)
-  }
-}
 
-const getPopularMovies = async () => {
-  try {
-    let data = await fetch(popularMovies);
-    let jsonResponse = await data.json();
-    return jsonResponse;
-  } catch (error) {
-    console.error("Something went wrong while fetching popular movies list", error)
-  }
-}
 
-const getUpcomingMovies = async () => {
-  try {
-    let data = await fetch(upcomingMovies);
-    let jsonResponse = data.json();
-    return jsonResponse;
-  } catch (error) {
-    console.error("Something went wrong while fetching upcoming movies list", error)
-  }
-}
+
 
 const HomeScreen = ({ navigation }: any) => {
 
@@ -45,19 +19,65 @@ const HomeScreen = ({ navigation }: any) => {
   const [nowPlayingMoviesList, setNowPlayingMoviesList] = useState<any>(undefined);
   const [popularMoviesList, setPopularMoviesList] = useState<any>(undefined);
   const [upcomingMoviesList, setUpcomingMoviesList] = useState<any>(undefined);
+  const [offset, setOffset] = useState(1);
+  const [popMovieOffset, setPopMovieOffset] = useState(1);
 
   useEffect(() => {
-    (async () => {
-      let tempNowPlaying = await getNowPlayingMovies();
-      setNowPlayingMoviesList(tempNowPlaying.results);
-      let tempPopular = await getPopularMovies();
-      setPopularMoviesList(tempPopular.results);
-      let tempUpcoming = await getUpcomingMovies();
-      setUpcomingMoviesList(tempUpcoming.results);
-    })();
+    getNowPlayingMovies()
+    getPopularMovies();
+    getUpcomingMovies();
   }, [])
 
+  const getNowPlayingMovies = async () => {
+    try {
+      if (nowPlayingMoviesList == undefined) {
+        let data = await fetch(`${nowPlayingMovies}&page=${offset}`);
+        let jsonResponse = await data.json();
+        setNowPlayingMoviesList(jsonResponse.results)
+        console.log(jsonResponse.results);
+        setOffset(offset + 1);
+      }
+      else {
+        let data = await fetch(`${nowPlayingMovies}&page=${offset}`);
+        let jsonResponse = await data.json();
+        setNowPlayingMoviesList([...nowPlayingMoviesList, ...jsonResponse.results])
+        setOffset(offset + 1);
+      }
 
+    } catch (error) {
+      console.error("Something went wrong while fetching popular movies list", error)
+    }
+  }
+
+  const getPopularMovies = async () => {
+    try {
+      if (popularMoviesList == undefined) {
+        let data = await fetch(popularMovies);
+        let jsonResponse = await data.json();
+        setPopularMoviesList(jsonResponse.results)
+      }
+      else {
+        let data = await fetch(`${popularMovies}&page=${popMovieOffset + 1}`);
+        let jsonResponse = await data.json();
+        setPopMovieOffset(jsonResponse.page);
+        setPopularMoviesList([...popularMoviesList, ...jsonResponse.results]);
+      }
+
+    } catch (error) {
+      console.error("Something went wrong while fetching popular movies list", error)
+    }
+  }
+
+  const getUpcomingMovies = async () => {
+    try {
+      let data = await fetch(upcomingMovies);
+      let jsonResponse = await data.json();
+      console.log(upcomingMovies);
+      setUpcomingMoviesList(jsonResponse.results)
+    } catch (error) {
+      console.error("Something went wrong while fetching upcoming movies list", error)
+    }
+  }
 
   const searchMoviesFunction = () => {
     navigation.navigate("Search")
@@ -101,6 +121,8 @@ const HomeScreen = ({ navigation }: any) => {
           renderItem={({ item }) => {
             return <SubMovieCard posterPath={imageUrl("w185", item.poster_path)} navigation={navigation} item={item} />
           }}
+          onEndReachedThreshold={1}
+          onEndReached={getNowPlayingMovies}
         />}
 
 
@@ -115,8 +137,9 @@ const HomeScreen = ({ navigation }: any) => {
           horizontal={true}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => {
-            return <SubMovieCard posterPath={imageUrl("w185", item.poster_path)} />
+            return <SubMovieCard posterPath={imageUrl("w185", item.poster_path)} navigation={navigation} item={item} />
           }}
+
         />}
 
       <CategoryHeader title={"Popular"} />
@@ -129,7 +152,10 @@ const HomeScreen = ({ navigation }: any) => {
             renderItem={({ item }) => {
               return <SubMovieCard posterPath={imageUrl("w185", item.poster_path)} />
             }}
+            onEndReachedThreshold={1}
+            onEndReached={getPopularMovies}
           />
+
         </View>}
 
 

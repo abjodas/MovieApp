@@ -5,7 +5,6 @@ import { SPACING, FONTSIZE, BORDERRADIUS } from '../Themes/theme';
 
 
 const SubMovieCard = (props: any) => {
-  console.log(props.posterPath)
   return (
     <TouchableOpacity style={styles.container} onPress={() => props.navigation.navigate("MovieDetails", { item: props.item })}>
       <Image style={styles.image} source={{ uri: props.posterPath }} />
