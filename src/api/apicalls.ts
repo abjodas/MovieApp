@@ -22,3 +22,7 @@ export const movieCastDetails = (movieId: number) => {
 export const imageUrl = (size: string, posterPath: string) => {
     return (`https://image.tmdb.org/t/p/${size}${posterPath}`)
 }
+
+export const searchCredits = (movieId: number) => {
+    return (`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${apikey}`)
+}

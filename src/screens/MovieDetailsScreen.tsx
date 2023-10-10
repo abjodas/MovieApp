@@ -6,6 +6,7 @@ import { COLORS, BORDERRADIUS, FONTSIZE, FONTFAMILY } from '../Themes/theme'
 import { imageUrl } from '../api/apicalls';
 import LinearGradient from 'react-native-linear-gradient';
 import { MovieDetails } from '../api/apicalls';
+import CastCard from '../components/CastCard';
 
 
 
@@ -106,6 +107,13 @@ const MovieDetailsScreen = ({ route, navigation }) => {
         }
     }
 
+    const getDuration = (runtime: number) => {
+        let hours = Math.floor(runtime / 60);
+        let minutes = runtime % 60;
+
+        return (`${hours}h ${minutes}m`)
+    }
+
     return (
         <ScrollView style={styles.container}>
 
@@ -164,7 +172,7 @@ const MovieDetailsScreen = ({ route, navigation }) => {
 
             <View style={styles.durationContainer}>
                 <CustomIcon name="clock" size={FONTSIZE.size_14} color={COLORS.WhiteRGBA32} />
-                <Text style={styles.durationText}>2h50m</Text>
+                <Text style={styles.durationText}>{getDuration(movieDetails.runtime)}</Text>
             </View>
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>{movieDetails.original_title}</Text>
@@ -184,10 +192,12 @@ const MovieDetailsScreen = ({ route, navigation }) => {
             </View>
 
             <View style={styles.ratingsContainer}>
-                <CustomIcon name="star" size={FONTSIZE.size_20} color={COLORS.Yellow} />
+                <View style={{ justifyContent: "center", marginTop: -3 }}>
+                    <CustomIcon name="star" size={FONTSIZE.size_20} color={COLORS.Yellow} />
+                </View>
                 <Text style={styles.ratingText}>{item.vote_average}</Text>
                 <Text style={[styles.ratingText, { marginLeft: 5 }]}>({item.vote_count})</Text>
-                <Text style={styles.ratingText}>
+                <Text style={[styles.ratingText, { marginLeft: 20 }]}>
                     {`${item.release_date.slice(0, 4)} ${getMonth(item.release_date.slice(5, 7))} ${item.release_date.slice(8, 10)}`}
                 </Text>
             </View>
@@ -195,6 +205,7 @@ const MovieDetailsScreen = ({ route, navigation }) => {
                 <Text style={styles.overviewText}>{item.overview}</Text>
             </View>
             <View><Text style={styles.castHeader}>Top Cast</Text></View>
+            <CastCard movieId={item.id} />
 
         </ScrollView >
     );
@@ -286,10 +297,13 @@ const styles = StyleSheet.create({
     ratingsContainer: {
         flexDirection: "row",
         alignItems: "center",
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+        marginTop: 5
     },
     ratingText: {
         color: COLORS.White,
+        fontFamily: FONTFAMILY.poppins_regular,
+        fontSize: FONTSIZE.size_12,
         marginLeft: 5
     },
     taglineContainer: {
